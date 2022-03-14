@@ -1,0 +1,8 @@
+{
+    "name": "mpa-vue-template",
+    "version": "1.0.0",
+    "main": "index.js",
+    "repository": "https://github.com/yanzhangshuai/mpa-vue-template.git",
+    "author": "yanzhangshuai <yanzhangshuai@126.com>",
+    "license": "MIT"
+  }
