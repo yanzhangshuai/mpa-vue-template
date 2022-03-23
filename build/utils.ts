@@ -1,7 +1,6 @@
-import path from 'path';
 import fs from 'fs';
+import path from 'path';
 import portfinder from 'portfinder';
-import { Env } from './type';
 
 export const root = process.cwd();
 
@@ -30,8 +29,8 @@ export const findPort = (startPort: number): Promise<number> => {
  */
 export const configPath = resolve('config');
 // 转换配置文件数据
-export function wrapperEnv(envConf: Record<keyof Env, string>): Env {
-  return (Object.keys(envConf) as Array<keyof Env>)
+export function wrapperEnv<T>(envConf: Record<keyof T, string>): T {
+  return (Object.keys(envConf) as Array<keyof T>)
     .map((envName) => {
       const value = envConf[envName].replace(/\\n/g, '\n');
       //  布尔值
@@ -56,12 +55,10 @@ export function wrapperEnv(envConf: Record<keyof Env, string>): Env {
     .reduce((prev, current) => {
       prev[current.envName] = current.value as never;
       return prev;
-    }, {} as Env);
+    }, {} as T);
 }
 
 export function getDir(_path: string) {
-  console.log('_path', _path);
-
   const files = fs.readdirSync(_path);
   return files.filter((item) => {
     const fPath = path.join(_path, item);
@@ -70,23 +67,26 @@ export function getDir(_path: string) {
   });
 }
 
-export function getModule(_path) {
+export function getModule(_path, targetModule?: Array<string>) {
   _path = resolve(_path);
   const dir = getDir(_path);
 
+  // 利用交集获取当前指定modules
+  const intersectModules = intersection(dir, targetModule || [], (m1, m2) => m1.toLocaleLowerCase() === m2.toLocaleLowerCase());
+
   const module = {};
 
-  dir.forEach((item) => {
+  (intersectModules.length ? intersectModules : dir).forEach((item) => {
     module[`${item}`] = path.join(_path, item);
   });
 
   return module;
 }
 
-export function getEntry(module: Record<string, string> | string, file = 'main.ts') {
+export function getEntry(module: Record<string, string> | string, targetModule?: Array<string>, file = 'main.ts') {
   let _module: Record<string, string>;
   if (typeof module === 'string') {
-    _module = getModule(module);
+    _module = getModule(module, targetModule);
   } else {
     _module = module;
   }
@@ -101,4 +101,9 @@ export function getEntry(module: Record<string, string> | string, file = 'main.t
 
 export function isPromiseLike<T>(it: unknown): it is PromiseLike<T> {
   return it instanceof Promise || typeof (it as Promise<T>)?.then === 'function';
+}
+
+export function intersection<T>(arr1: Array<T>, arr2: Array<T>, fn?: (val1: T, val2: T) => boolean) {
+  const _fn = fn || ((val1, val2) => val1 === val2);
+  return arr1.filter((val1) => arr2.find((val2) => _fn(val1, val2)));
 }

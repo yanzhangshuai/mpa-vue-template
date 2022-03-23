@@ -10,9 +10,17 @@ function rewrites(module: Record<string, string>) {
 }
 
 export function createDevServer(module: Record<string, string>, env: Env): Promise<Configuration> {
+  let open: boolean | Array<string> = false;
+
+  if (env.WEBPACK_SERVER_OPEN) {
+    open = Object.keys(module).map((key) => `${env.WEBPACK_SERVER_HTTPS ? 'https' : 'http'}://${env.WEBPACK_SERVER_HOST}:${env.WEBPACK_SERVER_PORT}/${key}`);
+  }
+
   const conf: Configuration = {
     port: env.WEBPACK_SERVER_PORT,
-    open: env.WEBPACK_SERVER_OPEN,
+    open: open,
+    host: env.WEBPACK_SERVER_HOST,
+    compress: env.WEBPACK_SERVER_COMPRESS,
     hot: true,
     historyApiFallback: {
       rewrites: rewrites(module)
@@ -26,7 +34,8 @@ export function createDevServer(module: Record<string, string>, env: Env): Promi
     },
 
     devMiddleware: {
-      stats: env.WEBPACK_SERVER_STATS
+      stats: env.WEBPACK_SERVER_STATS,
+      writeToDisk: env.WEBPACK_SERVER_WRITE_TO_DIST
     },
 
     watchFiles: {

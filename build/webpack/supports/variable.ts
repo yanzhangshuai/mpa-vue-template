@@ -1,13 +1,25 @@
-import { DefinePlugin } from 'webpack';
+import { Configuration, DefinePlugin } from 'webpack';
 import { SupportFn } from '../type';
-export const variableSupport: SupportFn = (module, isBuild, env) => {
-  return {
-    plugins: [
-      new DefinePlugin({
-        GLOBAL_FILE_PATH: JSON.stringify(env.WEBPACK_FILE_SERVER),
-        GLOBAL_VERSION: JSON.stringify(env.WEBPACK_VERSION),
-        DEV: !isBuild
-      })
-    ]
-  };
+import { loadEnv } from '../../config';
+import { configPath, wrapperEnv } from '../../utils';
+export const variableSupport: SupportFn = (module, isBuild) => {
+  const conf: Configuration = { plugins: [] };
+
+  const mode = process.env.NODE_ENV as 'development' | 'production';
+
+  const env = loadEnv(mode, configPath, 'GLOBAL_');
+
+  const globalEnv = wrapperEnv<Record<string, string | boolean | number>>(env);
+
+  globalEnv['GLOBAL_DEV'] = !isBuild;
+
+  for (const key in globalEnv) {
+    if (Object.prototype.hasOwnProperty.call(globalEnv, key)) {
+      globalEnv[key] = JSON.stringify(globalEnv[key]);
+    }
+  }
+
+  conf.plugins.push(new DefinePlugin(globalEnv));
+
+  return conf;
 };

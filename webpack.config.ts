@@ -2,6 +2,7 @@ import path from 'path';
 import { Configuration } from 'webpack';
 import TerserPlugin from 'terser-webpack-plugin';
 import { merge as webpackMerge } from 'webpack-merge';
+import { Env } from './build/type';
 import packageJson from './package.json';
 import { loadEnv } from './build/config';
 import { support } from './build/webpack/support';
@@ -9,11 +10,16 @@ import { createDevServer } from './build/webpack/dev';
 import { chunkFilename, filename } from './build/webpack/output';
 import { configPath, getEntry, getModule, resolve, wrapperEnv } from './build/utils';
 
-export default async (option: { WEBPACK_BUNDLE: boolean; WEBPACK_BUILD: boolean; WEBPACK_SERVE: boolean; development: boolean }): Promise<Configuration> => {
+export default async (env: { WEBPACK_BUNDLE?: boolean; WEBPACK_BUILD?: boolean; WEBPACK_SERVE?: boolean; target?: string; t?: string }): Promise<Configuration> => {
   //  环境判断
-  const isBuild = option.WEBPACK_BUILD;
+  const isBuild = env.WEBPACK_BUILD;
 
   const mode = isBuild ? 'production' : 'development';
+
+  // 本地执行的指定module
+  const targetModule = !(env.target || env.t) ? null : (env.target || env.t).split(',');
+
+  // process.argv = [];
 
   // 设置版本号
   process.env.GLOBAL_VERSION = packageJson.version;
@@ -21,17 +27,14 @@ export default async (option: { WEBPACK_BUNDLE: boolean; WEBPACK_BUILD: boolean;
   // 根据webpack命令设置NODE环境变量
   process.env.NODE_ENV = mode;
 
-  const env = loadEnv(mode, configPath);
+  const webpackEnv = wrapperEnv<Env>(loadEnv(mode, configPath));
 
-  const webpackEnv = wrapperEnv(env);
+  const module = getModule('/src/module', targetModule);
 
-  webpackEnv.WEBPACK_VERSION = process.env.GLOBAL_VERSION || '';
-
-  const module = getModule('/src/module');
+  webpackEnv.WEBPACK_SERVER_HOST = webpackEnv.WEBPACK_SERVER_HOST || 'localhost';
 
   const devServer = (!isBuild && (await createDevServer(module, webpackEnv))) || {};
 
-  webpackEnv.WEBPACK_SERVER_HOST = devServer.host || webpackEnv.WEBPACK_SERVER_HOST || 'localhost';
   webpackEnv.WEBPACK_SERVER_PORT = Number(devServer.port) || webpackEnv.WEBPACK_SERVER_PORT;
 
   const baseConf: Configuration = {
@@ -43,7 +46,7 @@ export default async (option: { WEBPACK_BUNDLE: boolean; WEBPACK_BUILD: boolean;
 
     devtool: webpackEnv.WEBPACK_DEVTOOL,
 
-    entry: getEntry(module),
+    entry: getEntry(module, targetModule),
 
     output: {
       path: path.isAbsolute(webpackEnv.WEBPACK_OUTPUT_DIR) ? webpackEnv.WEBPACK_OUTPUT_DIR : resolve(webpackEnv.WEBPACK_OUTPUT_DIR),
@@ -60,7 +63,7 @@ export default async (option: { WEBPACK_BUNDLE: boolean; WEBPACK_BUILD: boolean;
         new TerserPlugin({
           terserOptions: {
             compress: {
-              drop_console: webpackEnv.WEBPACK_DROP_CONSOLE
+              drop_console: webpackEnv.WEBPACK_BUILD_DROP_CONSOLE
             }
           }
         })
