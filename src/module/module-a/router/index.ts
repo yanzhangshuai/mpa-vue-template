@@ -5,9 +5,9 @@ import { setupRouterGuard } from './guard';
 
 let router: Router;
 
-export function setupRouter(app: App<Element>): App<Element> {
+export function setupRouter(app: App<Element>, base?: string): App<Element> {
   router = createRouter({
-    history: createWebHistory('module-a'),
+    history: createWebHistory(base),
     routes: routes as Array<RouteRecordRaw>,
     strict: false,
     scrollBehavior: () => ({ left: 0, top: 0 })

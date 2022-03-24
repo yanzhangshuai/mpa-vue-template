@@ -6,8 +6,8 @@ import { setupStore } from './store';
 import { setupComponent } from './component';
 import { isReady, setupRouter } from './router';
 import App from './page/app.vue';
+import 'windi.css';
 import '@/asset/style/index.less';
-import '@/asset/style/tailwind.css';
 
 const app = createApp(App);
 
@@ -17,7 +17,7 @@ setupComponent(app);
 
 setupDirective(app);
 
-setupRouter(app);
+setupRouter(app, 'module-a');
 
 setupService(app);
 

@@ -11,7 +11,6 @@ export const htmlSupport: SupportFn = (module, isBuild, env) => {
       title: `${env.WEBPACK_APP_TITLE ? env.WEBPACK_APP_TITLE + '_' : ''}` + key,
       publicPath: '/',
       inject: 'body',
-      //  是否进行缓存，默认为true，在开发环境可以设置成false
       cache: isBuild,
       minify: isBuild
     });
