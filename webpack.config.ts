@@ -2,13 +2,14 @@ import path from 'path';
 import { Configuration } from 'webpack';
 import TerserPlugin from 'terser-webpack-plugin';
 import { merge as webpackMerge } from 'webpack-merge';
-import { Env } from './build/type';
 import packageJson from './package.json';
-import { loadEnv } from './build/config';
+import { Env } from './build/type/env';
+import { loadEnv } from './build/util/config';
+import { configPath, resolve } from './build/util/path';
+import { getEntry, getModule, wrapperEnv } from './build/util/helper';
 import { support } from './build/webpack/support';
 import { createDevServer } from './build/webpack/dev';
 import { chunkFilename, filename } from './build/webpack/output';
-import { configPath, getEntry, getModule, resolve, wrapperEnv } from './build/utils';
 
 export default async (env: { WEBPACK_BUNDLE?: boolean; WEBPACK_BUILD?: boolean; WEBPACK_SERVE?: boolean; target?: string; t?: string }): Promise<Configuration> => {
   //  环境判断
@@ -18,8 +19,6 @@ export default async (env: { WEBPACK_BUNDLE?: boolean; WEBPACK_BUILD?: boolean; 
 
   // 本地执行的指定module
   const targetModule = !(env.target || env.t) ? null : (env.target || env.t).split(',');
-
-  // process.argv = [];
 
   // 设置版本号
   process.env.GLOBAL_VERSION = packageJson.version;

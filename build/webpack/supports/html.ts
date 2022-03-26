@@ -1,6 +1,6 @@
 import path from 'path';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
-import { SupportFn } from '../type';
+import { SupportFn } from '../../type/webpack';
 
 export const htmlSupport: SupportFn = (module, isBuild, env) => {
   const plugins = Object.keys(module).map((key) => {

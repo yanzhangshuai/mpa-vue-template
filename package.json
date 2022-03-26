@@ -1,7 +1,6 @@
 {
   "name": "mpa-vue-webpack",
   "version": "1.0.0",
-  "main": "index.js",
   "repository": "https://github.com/OrcasTeam/mpa-vue-template.git",
   "author": "yanzhangshuai <yanzhangshuai@126.com>",
   "license": "MIT",
@@ -10,12 +9,12 @@
     "build": "cross-env TS_NODE_PROJECT=\"tsconfig-for-webpack-config.json\" webpack",
     "build:br": "npm-run-all lint && cross-env TS_NODE_PROJECT=\"tsconfig-for-webpack-config.json\" WEBPACK_BUILD_COMPRESS=brotli  webpack",
     "build:gzip": "npm-run-all lint && cross-env TS_NODE_PROJECT=\"tsconfig-for-webpack-config.json\" WEBPACK_BUILD_COMPRESS=gzip  webpack",
-    "report": "cross-env TS_NODE_PROJECT=\"tsconfig-for-webpack-config.json\"  WEBPACK_REPORT=true webpack",
     "lint:js": "eslint --config .eslintrc.js  ./{src,test,type,build}/**/*.{ts,tsx,vue} --fix",
     "lint:style": "stylelint --config .stylelintrc.js ./src/**/*.{css,less,vue} --fix",
     "lint": "npm-run-all --parallel lint:*",
-    "analysis": "windicss-analysis",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "report": "cross-env TS_NODE_PROJECT=\"tsconfig-for-webpack-config.json\"  WEBPACK_REPORT=true webpack",
+    "report:windi": "windicss-analysis"
   },
   "dependencies": {
     "@vue/runtime-core": "^3.2.31",

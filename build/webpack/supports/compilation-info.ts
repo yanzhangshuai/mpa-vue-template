@@ -1,5 +1,5 @@
 import FriendlyErrorsWebpackPlugin from '@nuxt/friendly-errors-webpack-plugin';
-import { SupportFn } from '../type';
+import { SupportFn } from '../../type/webpack';
 
 export const compilationInfoSupport: SupportFn = (module, isBuild, env) => {
   const messages = [];

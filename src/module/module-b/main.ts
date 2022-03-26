@@ -1,9 +1,9 @@
 import { createApp } from 'vue';
 import { setupPlugin } from '@/plugin';
 import { setupService } from '@/service';
+import { setupComponent } from '@/component';
 import { setupDirective } from '@/directive';
 import { setupStore } from './store';
-import { setupComponent } from './component';
 import { isReady, setupRouter } from './router';
 import App from './page/app.vue';
 import 'windi.css';
