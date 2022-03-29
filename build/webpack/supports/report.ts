@@ -5,5 +5,5 @@ import { SupportFn } from '../../type/webpack';
 export const reportSupport: SupportFn = (module, isBuild, env) => {
   if (!env?.WEBPACK_REPORT) return {};
 
-  return { plugins: [new BundleAnalyzerPlugin({ analyzerMode: 'static', reportFilename: resolve('report/dependence/index.html') })] };
+  return { plugins: [new BundleAnalyzerPlugin({ analyzerMode: 'static', reportFilename: resolve('report/depend/index.html') })] };
 };
