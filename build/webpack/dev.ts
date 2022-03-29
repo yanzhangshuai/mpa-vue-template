@@ -1,7 +1,6 @@
 import { Configuration } from 'webpack-dev-server';
 import { Env } from '../type/env';
 import { createProxy } from './proxy';
-import { resolve } from '../util/path';
 import { findPort } from '../util/helper';
 
 function rewrites(module: Record<string, string>) {
@@ -39,13 +38,13 @@ export function createDevServer(module: Record<string, string>, env: Env): Promi
       writeToDisk: env.WEBPACK_SERVER_WRITE_TO_DIST
     },
 
-    watchFiles: {
-      paths: resolve('src'),
-      options: {
-        usePolling: false,
-        ignored: /node_modules/
-      }
-    },
+    // watchFiles: {
+    //   paths: ['src/**/*.png', 'public/**/*'],
+    //   options: {
+    //     usePolling: false,
+    //     ignored: /node_modules/
+    //   }
+    // },
     proxy: createProxy(env.WEBPACK_SERVER_PROXY)
   };
 
