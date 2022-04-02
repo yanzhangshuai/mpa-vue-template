@@ -2,26 +2,24 @@ import path from 'path';
 import { Configuration } from 'webpack';
 import TerserPlugin from 'terser-webpack-plugin';
 import { merge as webpackMerge } from 'webpack-merge';
-import packageJson from './package.json';
-import { Env } from './build/type/env';
-import { loadEnv } from './build/util/config';
-import { configPath, resolve } from './build/util/path';
-import { getEntry, getModule, wrapperEnv } from './build/util/helper';
-import { support } from './build/webpack/support';
-import { createDevServer } from './build/webpack/dev';
-import { chunkFilename, filename } from './build/webpack/output';
+import { version } from '../package.json';
+import { Env } from './type/env';
+import { loadEnv } from './util/config';
+import { configPath, resolve } from './util/path';
+import { getEntry, getModule, wrapperEnv } from './util/helper';
+import { alias } from './webpack/alias';
+import { support } from './webpack/support';
+import { createDevServer } from './webpack/dev';
+import { filename, chunkFilename } from './webpack/output';
 
-export default async (env: { WEBPACK_BUNDLE?: boolean; WEBPACK_BUILD?: boolean; WEBPACK_SERVE?: boolean; target?: string; t?: string }): Promise<Configuration> => {
-  //  环境判断
-  const isBuild = env.WEBPACK_BUILD;
-
-  const mode = isBuild ? 'production' : 'development';
+export default async (option: { WEBPACK_BUNDLE?: boolean; WEBPACK_BUILD?: boolean; WEBPACK_SERVE?: boolean; target?: string; t?: string }): Promise<Configuration> => {
+  const mode = option.WEBPACK_BUILD ? 'production' : 'development';
 
   // 本地执行的指定module
-  const targetModule = !(env.target || env.t) ? null : (env.target || env.t).split(',');
+  const targetModule = !(option.target || option.t) ? null : (option.target || option.t).split(',');
 
   // 设置版本号
-  process.env.GLOBAL_APP_VERSION = packageJson.version;
+  process.env.GLOBAL_APP_VERSION = version;
 
   // 根据webpack命令设置NODE环境变量
   process.env.NODE_ENV = mode;
@@ -32,7 +30,7 @@ export default async (env: { WEBPACK_BUNDLE?: boolean; WEBPACK_BUILD?: boolean; 
 
   webpackEnv.WEBPACK_SERVER_HOST = webpackEnv.WEBPACK_SERVER_HOST || 'localhost';
 
-  const devServer = (!isBuild && (await createDevServer(module, webpackEnv))) || {};
+  const devServer = (mode === 'development' && (await createDevServer(module, webpackEnv))) || {};
 
   webpackEnv.WEBPACK_SERVER_PORT = Number(devServer.port) || webpackEnv.WEBPACK_SERVER_PORT;
 
@@ -49,15 +47,15 @@ export default async (env: { WEBPACK_BUNDLE?: boolean; WEBPACK_BUILD?: boolean; 
 
     output: {
       path: path.isAbsolute(webpackEnv.WEBPACK_OUTPUT_DIR) ? webpackEnv.WEBPACK_OUTPUT_DIR : resolve(webpackEnv.WEBPACK_OUTPUT_DIR),
-      filename: filename,
-      chunkFilename: chunkFilename,
+      filename: (pathData, assetInfo) => filename(mode, pathData, assetInfo),
+      chunkFilename: (pathData, assetInfo) => chunkFilename(mode, pathData, assetInfo),
       clean: true
     },
 
     devServer: devServer,
 
     optimization: {
-      minimize: isBuild,
+      minimize: mode === 'production',
       minimizer: [
         new TerserPlugin({
           terserOptions: {
@@ -73,12 +71,9 @@ export default async (env: { WEBPACK_BUNDLE?: boolean; WEBPACK_BUILD?: boolean; 
 
     resolve: {
       mainFiles: ['index', 'module'],
-      alias: {
-        '@': resolve('src'),
-        ...module
-      }
+      alias: alias()
     }
   };
 
-  return webpackMerge(baseConf, support(module, isBuild, webpackEnv));
+  return webpackMerge(baseConf, support(module, mode, webpackEnv));
 };

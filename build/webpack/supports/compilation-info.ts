@@ -1,11 +1,12 @@
 import FriendlyErrorsWebpackPlugin from '@nuxt/friendly-errors-webpack-plugin';
 import { SupportFn } from '../../type/webpack';
 
-export const compilationInfoSupport: SupportFn = (module, isBuild, env) => {
+export const compilationInfoSupport: SupportFn = (module, mode, env) => {
   const messages = [];
 
-  if (!isBuild) {
-    messages.push(...Object.keys(module).map((key) => `${env.WEBPACK_SERVER_HTTPS ? 'https' : 'http'}://${env.WEBPACK_SERVER_HOST}:${env.WEBPACK_SERVER_PORT}/${key}`));
+  if (mode === 'development') {
+    const protocol = env.WEBPACK_SERVER_HTTPS ? 'https' : 'http';
+    messages.push(...Object.keys(module).map((key) => `${protocol}://${env.WEBPACK_SERVER_HOST}:${env.WEBPACK_SERVER_PORT}/${key}`));
   }
 
   return {

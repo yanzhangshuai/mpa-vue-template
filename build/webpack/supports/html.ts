@@ -2,7 +2,7 @@ import path from 'path';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import { SupportFn } from '../../type/webpack';
 
-export const htmlSupport: SupportFn = (module, isBuild, env) => {
+export const htmlSupport: SupportFn = (module, mode, env) => {
   const plugins = Object.keys(module).map((key) => {
     return new HtmlWebpackPlugin({
       template: path.join(module[key], 'public/index.html'),
@@ -11,8 +11,8 @@ export const htmlSupport: SupportFn = (module, isBuild, env) => {
       title: `${env.WEBPACK_APP_TITLE ? env.WEBPACK_APP_TITLE + '_' : ''}` + key,
       publicPath: '/',
       inject: 'body',
-      cache: isBuild,
-      minify: isBuild
+      cache: mode === 'production',
+      minify: mode === 'production'
     });
   });
 

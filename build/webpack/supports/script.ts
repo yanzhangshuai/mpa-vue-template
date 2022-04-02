@@ -8,7 +8,7 @@ export const scriptSupport: SupportFn = () => {
         {
           test: /\.[tj]s(x)?$/,
           include: resolve('src'),
-          use: ['thread-loader', 'babel-loader']
+          use: ['thread-loader', { loader: 'babel-loader', options: { configFile: resolve('build/babel.config.js') } }]
         }
       ]
     },

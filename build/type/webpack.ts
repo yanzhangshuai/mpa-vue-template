@@ -1,4 +1,8 @@
 import { Configuration } from 'webpack';
 import { Env } from './env';
 
-export type SupportFn = (module: Record<string, string>, isBuild: boolean, env: Env) => Configuration;
+export type Mode = 'development' | 'production';
+
+export type Module = Record<string, string>;
+
+export type SupportFn = (module: Module, mode: Mode, env: Env) => Configuration;

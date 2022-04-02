@@ -1,19 +1,21 @@
 import { Configuration } from 'webpack-dev-server';
 import { Env } from '../type/env';
+import { Module } from '../type/webpack';
 import { createProxy } from './proxy';
 import { findPort } from '../util/helper';
 
-function rewrites(module: Record<string, string>) {
+function rewrites(module: Module) {
   return Object.keys(module).map((key) => {
     return { from: new RegExp(`^\/${key}`), to: `/${key}/index.html` };
   });
 }
 
-export function createDevServer(module: Record<string, string>, env: Env): Promise<Configuration> {
+export function createDevServer(module: Module, env: Env): Promise<Configuration> {
   let open: boolean | Array<string> = false;
 
   if (env.WEBPACK_SERVER_OPEN) {
-    open = Object.keys(module).map((key) => `${env.WEBPACK_SERVER_HTTPS ? 'https' : 'http'}://${env.WEBPACK_SERVER_HOST}:${env.WEBPACK_SERVER_PORT}/${key}`);
+    const protocol = env.WEBPACK_SERVER_HTTPS ? 'https' : 'http';
+    open = Object.keys(module).map((key) => `${protocol}://${env.WEBPACK_SERVER_HOST}:${env.WEBPACK_SERVER_PORT}/${key}`);
   }
 
   const conf: Configuration = {

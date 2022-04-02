@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import portfinder from 'portfinder';
 import { resolve } from './path';
+import { Module } from '../type/webpack';
 
 export function moduleAlias(modules: Array<string>, prefixPath = 'src'): Record<string, string> {
   return modules.reduce((accumulator, current) => {
@@ -55,7 +56,7 @@ export function wrapperEnv<T>(envConf: Record<keyof T, string>): T {
  * @param targetModule 目标module
  * @returns
  */
-export function getModule(dir: string, targetModule?: Array<string>) {
+export function getModule(dir: string, targetModule?: Array<string>): Module {
   dir = resolve(dir);
   const _dir = getDir(dir);
 
@@ -78,7 +79,7 @@ export function getModule(dir: string, targetModule?: Array<string>) {
  * @param file
  * @returns
  */
-export function getEntry(module: Record<string, string> | string, targetModule?: Array<string>, file = 'main.ts') {
+export function getEntry(module: Module | string, targetModule?: Array<string>, file = 'main.ts') {
   let _module: Record<string, string>;
   if (typeof module === 'string') {
     _module = getModule(module, targetModule);
@@ -110,11 +111,11 @@ export function intersection<T>(arr1: Array<T>, arr2: Array<T>, fn?: (val1: T, v
   return arr1.filter((val1) => arr2.find((val2) => _fn(val1, val2)));
 }
 
-function getDir(_path: string) {
-  const files = fs.readdirSync(_path);
+function getDir(dir: string) {
+  const files = fs.readdirSync(dir);
   return files.filter((item) => {
-    const fPath = path.join(_path, item);
-    const stat = fs.statSync(fPath);
+    const _path = path.join(dir, item);
+    const stat = fs.statSync(_path);
     return stat.isDirectory();
   });
 }

@@ -3,7 +3,7 @@ import { VueLoaderPlugin } from 'vue-loader';
 import { resolve } from '../../util/path';
 import { SupportFn } from '../../type/webpack';
 
-export const vueSupport: SupportFn = (module, isBuild, env) => {
+export const vueSupport: SupportFn = (module, mode, env) => {
   return {
     module: {
       rules: [
@@ -14,8 +14,16 @@ export const vueSupport: SupportFn = (module, isBuild, env) => {
         }
       ]
     },
-    plugins: [new VueLoaderPlugin(), new DefinePlugin({ __VUE_OPTIONS_API__: env.WEBPACK_SUPPORT_VUE_OPTIONS_API, __VUE_PROD_DEVTOOLS__: false })],
-
-    resolve: { extensions: ['.vue'], alias: { vue: '@vue/runtime-dom' } }
+    plugins: [
+      new VueLoaderPlugin(),
+      new DefinePlugin({
+        __VUE_OPTIONS_API__: env.WEBPACK_SUPPORT_VUE_OPTIONS_API,
+        __VUE_PROD_DEVTOOLS__: false
+      })
+    ],
+    resolve: {
+      extensions: ['.vue'],
+      alias: { vue: '@vue/runtime-dom' }
+    }
   };
 };

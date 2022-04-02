@@ -1,5 +1,5 @@
 import { Router } from 'vue-router';
-import { useUserStore } from '@/module/module-a/store/modules/user';
+import { useUserStore } from 'module-a/store/user';
 
 /**
  * 认证守卫
@@ -21,7 +21,7 @@ export function createAuthGuard(router: Router): void {
       })
       .catch(() => {
         //  失败跳转登录页
-        next('/account/login');
+        window.location.replace('/module-b');
       });
   });
 }

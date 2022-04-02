@@ -4,19 +4,22 @@ import WindiCSSWebpackPlugin from 'windicss-webpack-plugin';
 import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
 import { resolve } from '../../util/path';
 import { SupportFn } from '../../type/webpack';
-import { cssChunkFilename, cssFilename } from '../output';
+import { cssFilename, cssChunkFilename } from '../output';
 
-export const styleSupport: SupportFn = (module, isBuild) => {
+export const styleSupport: SupportFn = (module, mode) => {
   const { loader } = MiniCssExtractPlugin;
   const styleConf: Configuration = {
     module: {
       rules: [
-        { test: /\.css$/, use: [isBuild ? loader : 'style-loader', { loader: 'css-loader' }, 'postcss-loader'] },
+        {
+          test: /\.css$/,
+          use: [mode === 'production' ? loader : 'style-loader', { loader: 'css-loader' }, { loader: 'postcss-loader', options: { postcssOptions: { config: resolve('build/postcss.config.js') } } }]
+        },
         {
           test: /\.less$/,
           include: resolve('src'),
           use: [
-            isBuild ? loader : 'style-loader',
+            mode === 'production' ? loader : 'style-loader',
             { loader: 'css-loader', options: { importLoaders: 2 } },
             {
               loader: 'less-loader',
@@ -41,6 +44,13 @@ export const styleSupport: SupportFn = (module, isBuild) => {
     resolve: { extensions: ['.less', '.css'] }
   };
 
-  isBuild && styleConf.plugins.push(new MiniCssExtractPlugin({ filename: cssFilename, chunkFilename: cssChunkFilename }));
+  mode === 'production' &&
+    styleConf.plugins.push(
+      new MiniCssExtractPlugin({
+        filename: (pathData, assetInfo) => cssFilename(mode, pathData, assetInfo),
+        chunkFilename: (pathData, assetInfo) => cssChunkFilename(mode, pathData, assetInfo)
+      })
+    );
+
   return styleConf;
 };

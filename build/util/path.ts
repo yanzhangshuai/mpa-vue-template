@@ -2,8 +2,8 @@ import path from 'path';
 
 export const root = process.cwd();
 
-export const resolve = (dir: string): string => {
-  return path.join(root, dir);
+export const resolve = (...dir: Array<string>): string => {
+  return path.join(root, ...dir);
 };
 
 /**
