@@ -13,10 +13,12 @@ npm run build                   生产环境
 npm run build:br                生产环境, 文件压缩.br格式
 npm run build:gzip              生产环境, 文件压缩.gzip格式
 
+npm run test                    单元测试
 npm run lint                    eslint、stylelint
 
 npm run report                  分析生产环境编译结果
 npm run report:windi            分析 windicss 使用结果
+npm run report:test             分析 单元测试 情况
 ```
 
 项目结构
@@ -34,4 +36,5 @@ npm run report:windi            分析 windicss 使用结果
   * **store**：数据缓存模块
   * **util**：工具模块
 * **standard**：代码规则层
+* **test**：单元测试层
 * **type**：通用类型层
