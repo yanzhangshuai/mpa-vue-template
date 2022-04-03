@@ -18,7 +18,7 @@ export function alias() {
     const aliasPath = path?.[0].match(ALIAS_REGEX)?.[0];
     if (!aliasName || !aliasPath) return;
 
-    paths[aliasName] = resolve(compilerOptions.baseUrl, aliasPath).replace(/\\/g, '/');
+    paths[aliasName] = resolve(compilerOptions.baseUrl, aliasPath);
   });
 
   return paths;

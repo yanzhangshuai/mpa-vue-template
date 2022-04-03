@@ -1,21 +1,21 @@
+import 'windi.css';
 import { createApp } from 'vue';
 import { setupPlugin } from '@/plugin';
 import { setupService } from '@/service';
-import { setupComponent } from '@/component';
-import { setupDirective } from '@/directive';
+// import { setupComponent } from '@/component';
+// import { setupDirective } from '@/directive';
 import { setupStore } from './store';
 import { isReady, setupRouter } from './router';
 import App from './page/app.vue';
-import 'windi.css';
 import '@/asset/style/index.less';
 
 const app = createApp(App);
 
 setupPlugin(app);
 
-setupComponent(app);
+// setupComponent(app);
 
-setupDirective(app);
+// setupDirective(app);
 
 setupRouter(app, 'module-b');
 

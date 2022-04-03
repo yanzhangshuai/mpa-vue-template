@@ -21,11 +21,9 @@ export const useUserStore = defineStore({
           return;
         }
 
-        // TODO: 模拟登录成功
-        setTimeout(() => {
-          this.token = '123';
-          resolve(this.token);
-        });
+        // TODO: 模拟登录
+        this.token = '123';
+        resolve(this.token);
       });
     },
 

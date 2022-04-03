@@ -9,11 +9,11 @@ import { reportSupport } from './supports/report';
 import { scriptSupport } from './supports/script';
 import { chunksSupport } from './supports/chunks';
 import { variableSupport } from './supports/variable';
-import { compressSupport } from './supports/compress';
+import { compressionSupport } from './supports/compression';
 import { compilationInfoSupport } from './supports/compilation-info';
 
 export function support(module: Module, mode: Mode, env: Env): Configuration {
-  const supports: Array<SupportFn> = [vueSupport, scriptSupport, chunksSupport, compilationInfoSupport, styleSupport, variableSupport, htmlSupport, reportSupport, compressSupport];
+  const supports: Array<SupportFn> = [vueSupport, scriptSupport, chunksSupport, styleSupport, variableSupport, htmlSupport, compilationInfoSupport, compressionSupport, reportSupport];
 
   return webpackMerge(supports.map((support) => support(module, mode, env)));
 }

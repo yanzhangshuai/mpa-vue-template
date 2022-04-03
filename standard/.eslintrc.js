@@ -9,7 +9,6 @@ module.exports = {
   extends: ['plugin:vue/vue3-recommended', 'plugin:@typescript-eslint/recommended', 'plugin:prettier/recommended', 'plugin:jest/recommended', 'plugin:jest/style'],
 
   parser: 'vue-eslint-parser',
-  //  解析器配置
   parserOptions: {
     parser: '@typescript-eslint/parser',
     sourceType: 'module',
@@ -21,12 +20,12 @@ module.exports = {
   settings: {
     'import/resolver': {
       alias: [
-        ['module-a/store','../src/module/module-a/store/modules'],
-        ['module-a','../src/module/module-a'],
-        ['module-b/store','../src/module/module-b/store/modules'],
-        ['module-b','../src/module/module-b'],
-        ['component','../src/component/modules'],
-        ['directive','../src/directive/modules'],
+        ['module-a/store', '../src/module/module-a/store/modules'],
+        ['module-a', '../src/module/module-a'],
+        ['module-b/store', '../src/module/module-b/store/modules'],
+        ['module-b', '../src/module/module-b'],
+        ['component', '../src/component/modules'],
+        ['directive', '../src/directive/modules'],
         ['@', '../src']
       ]
     }
@@ -41,6 +40,7 @@ module.exports = {
   rules: {
     'no-var': 2,
     'no-eval': 2,
+    'comma-dangle': ['error', 'never'],
     'no-alert': process.env.NODE_ENV !== 'production' ? 0 : 2,
     'no-console': process.env.NODE_ENV !== 'production' ? 0 : [1, { allow: ['warn', 'error'] }],
     'no-restricted-syntax': 2,
@@ -70,10 +70,10 @@ module.exports = {
     '@typescript-eslint/no-var-requires': 2,
     '@typescript-eslint/no-inferrable-types': 2,
     'vue/require-default-prop': 2,
+    'vue/singleline-html-element-content-newline': 0,
     'vue/multi-word-component-names': 0,
     'vue/eqeqeq': [2, 'always', { null: 'ignore' }],
     'vue/max-attributes-per-line': [0, { singleline: 1, multiline: { max: 1, allowFirstLine: false } }],
-
     'jest/consistent-test-it': [2, { fn: 'it' }],
     'jest/no-disabled-tests': 1,
     'jest/no-focused-tests': 2,

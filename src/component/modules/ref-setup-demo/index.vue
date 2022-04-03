@@ -5,6 +5,7 @@
 
 <script setup lang="ts">
 import { PropType } from 'vue';
+
 export interface De {
   name: string;
 }
@@ -31,4 +32,5 @@ defineExpose({
   name: props.name
 });
 </script>
+
 <style lang="less" scoped></style>

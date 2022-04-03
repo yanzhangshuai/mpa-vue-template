@@ -12,8 +12,6 @@ export const scriptSupport: SupportFn = () => {
         }
       ]
     },
-    resolve: {
-      extensions: ['.tsx', '.ts', '.jsx', '.js']
-    }
+    resolve: { extensions: ['.ts', '.tsx', '.json', '.jsx', '.mjs', '.js'] }
   };
 };

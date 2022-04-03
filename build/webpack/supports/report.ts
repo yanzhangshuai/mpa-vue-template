@@ -3,12 +3,12 @@ import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import { resolve } from '../../util/path';
 import { SupportFn } from '../../type/webpack';
 
-export const reportSupport: SupportFn = (module, isBuild, env) => {
-  const conf: Configuration = { plugins: [] };
+export const reportSupport: SupportFn = (_module, _mode, env) => {
+  const config: Configuration = { plugins: [] };
 
-  if (!env?.WEBPACK_REPORT) return conf;
+  if (!env.WEBPACK_REPORT) return config;
 
-  conf.plugins.push(new BundleAnalyzerPlugin({ analyzerMode: 'static', reportFilename: resolve('report/libs/index.html') }));
+  config.plugins.push(new BundleAnalyzerPlugin({ analyzerMode: 'static', reportFilename: resolve('report/libs/index.html') }));
 
-  return conf;
+  return config;
 };

@@ -23,6 +23,6 @@ export function setupStore(app: App<Element>): App<Element> {
   return app;
 }
 
-export function useStore(): Readonly<Store> {
+export function useStore(): DeepReadonly<Store> {
   return store;
 }

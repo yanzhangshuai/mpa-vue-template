@@ -6,8 +6,9 @@ import { resolve } from '../../util/path';
 import { SupportFn } from '../../type/webpack';
 import { cssFilename, cssChunkFilename } from '../output';
 
-export const styleSupport: SupportFn = (module, mode) => {
+export const styleSupport: SupportFn = (_module, mode) => {
   const { loader } = MiniCssExtractPlugin;
+
   const styleConf: Configuration = {
     module: {
       rules: [

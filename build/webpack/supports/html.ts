@@ -1,9 +1,10 @@
 import path from 'path';
+import { WebpackPluginInstance } from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import { SupportFn } from '../../type/webpack';
 
 export const htmlSupport: SupportFn = (module, mode, env) => {
-  const plugins = Object.keys(module).map((key) => {
+  const plugins: Array<WebpackPluginInstance> = Object.keys(module).map((key) => {
     return new HtmlWebpackPlugin({
       template: path.join(module[key], 'public/index.html'),
       filename: path.join(key, 'index.html'),

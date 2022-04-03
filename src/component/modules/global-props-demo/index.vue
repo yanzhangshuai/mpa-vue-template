@@ -7,7 +7,9 @@
   <li>当前是否为开发环境：{{ $globalProps.DEV }}</li>
   <li>当前时间：{{ $globalProps.dateFormat($window.Date.now()) }}</li>
 </template>
+
 <script setup lang="ts"></script>
+
 <style lang="less" scoped>
 li {
   @apply font-bold py-1 list-none px-0 text-red-300 rounded !important;

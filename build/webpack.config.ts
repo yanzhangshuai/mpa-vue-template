@@ -4,9 +4,9 @@ import TerserPlugin from 'terser-webpack-plugin';
 import { merge as webpackMerge } from 'webpack-merge';
 import { version } from '../package.json';
 import { Env } from './type/env';
-import { loadEnv } from './util/config';
+import { loadEnv, wrapperEnv } from './util/env';
 import { configPath, resolve } from './util/path';
-import { getEntry, getModule, wrapperEnv } from './util/helper';
+import { getEntry, getModule } from './util/module';
 import { alias } from './webpack/alias';
 import { support } from './webpack/support';
 import { createDevServer } from './webpack/dev';
@@ -70,7 +70,7 @@ export default async (option: { WEBPACK_BUNDLE?: boolean; WEBPACK_BUILD?: boolea
     performance: { maxEntrypointSize: 400000, maxAssetSize: 400000 },
 
     resolve: {
-      mainFiles: ['index', 'module'],
+      mainFiles: ['index', 'module', 'jsnext'],
       alias: alias()
     }
   };
