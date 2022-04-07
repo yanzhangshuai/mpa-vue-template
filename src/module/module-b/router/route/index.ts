@@ -1,6 +1,8 @@
 import { flatMap, isArray } from 'lodash-es';
 import { RouteRecordRaw } from 'vue-router';
 import { moduleFilter } from '@/util/helper';
+import { ErrorRouteName } from './modules/error/const';
+import { AccountRouteName } from './modules/account/const';
 
 /**
  * 遍历moduleRoutes
@@ -27,7 +29,13 @@ export const routes: Array<RouteRecordRaw> = [
   ...moduleRoutes,
   {
     path: '/',
-    redirect: '/account'
+    redirect: AccountRouteName.DEFAULT_ROUTER
+  },
+  {
+    path: '/:catchAll(.*)',
+    redirect: {
+      name: ErrorRouteName.NOT_FOUND_ROUTER
+    }
   }
 ];
 

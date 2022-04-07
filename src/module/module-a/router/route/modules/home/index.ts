@@ -1,25 +1,25 @@
 import { RouteRecordRaw } from 'vue-router';
-import Demo1Router from './demo1';
-import { HomeRouterName } from './const';
+import Demo1Route from './demo1';
+import { HomeRouteName } from './const';
 
 const router: RouteRecordRaw = {
   path: '/home',
-  name: HomeRouterName.HOME_ROUTER,
-  component: () => import(/* webpackChunkName: "home"*/ `module-a/page/home/index.vue`),
+  name: HomeRouteName.DEFAULT_ROUTER,
+  component: () => import(/* webpackChunkName: "module-a~home"*/ `module-a/page/home/index.vue`),
   meta: {
     auth: true
   },
   children: [
     {
       path: '',
-      redirect: { name: HomeRouterName.HOME_DEMO1_ROUTER }
+      redirect: { name: HomeRouteName.DEMO1_ROUTER }
     },
-    Demo1Router,
     {
       path: 'demo2',
-      name: HomeRouterName.HOME_DEMO2_ROUTER,
-      component: () => import(/* webpackChunkName: "home"*/ `module-a/page/home/demo2/index.vue`)
-    }
+      name: HomeRouteName.DEMO2_ROUTER,
+      component: () => import(/* webpackChunkName: "module-a~home"*/ `module-a/page/home/demo2/index.vue`)
+    },
+    Demo1Route
   ]
 };
 

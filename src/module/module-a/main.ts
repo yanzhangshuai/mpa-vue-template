@@ -4,6 +4,7 @@ import { setupPlugin } from '@/plugin';
 import { setupService } from '@/service';
 import { setupComponent } from '@/component';
 import { setupDirective } from '@/directive';
+import { ModuleName } from './const';
 import { setupStore } from './store';
 import { isReady, setupRouter } from './router';
 import App from './page/app.vue';
@@ -17,7 +18,7 @@ setupComponent(app);
 
 setupDirective(app);
 
-setupRouter(app, 'module-a');
+setupRouter(app, ModuleName);
 
 setupService(app);
 
