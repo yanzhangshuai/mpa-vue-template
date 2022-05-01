@@ -1,8 +1,8 @@
 import fs from 'fs';
 import path from 'path';
+import type { Module } from '../type/webpack';
 import { resolve } from './path';
 import { intersection } from './helper';
-import { Module } from '../type/webpack';
 
 /**
  * 获取module
@@ -35,11 +35,10 @@ export function getModule(modulePath: string, targetModule?: Array<string>): Mod
  */
 export function getEntry(module: Module | string, targetModule?: Array<string>, file = 'main.ts') {
   let _module: Record<string, string>;
-  if (typeof module === 'string') {
+  if (typeof module === 'string')
     _module = getModule(module, targetModule);
-  } else {
+  else
     _module = module;
-  }
 
   const entry = {};
   Object.keys(_module).forEach((key) => {

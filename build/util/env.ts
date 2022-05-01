@@ -8,13 +8,12 @@ const RE_INI_KEY_VAL = /^\s*([\w.-]+)\s*=\s*(.*)?\s*$/;
 
 export function loadEnv(mode: 'development' | 'production', envDir: string, prefix = 'WEBPACK_'): Record<string, string> {
   const env: Record<string, string> = {};
-  const envFiles = [/** mode local file */ `.env.${mode}.local`, /** mode file */ `.env.${mode}`, /** local file */ `.env.local`, /** default file */ `.env`];
+  const envFiles = [`.env.${mode}.local`, /** mode file */ `.env.${mode}`, /** local file */ '.env.local', /** default file */ '.env'];
   // 检查是否有前缀起始的env变量
   // 通常是内联提供的，应该按优先级排列
   for (const key in process.env) {
-    if (key.startsWith(prefix) && env[key] === undefined) {
+    if (key.startsWith(prefix) && env[key] === undefined)
       env[key] = process.env[key];
-    }
   }
 
   for (const file of envFiles) {
@@ -31,9 +30,10 @@ export function loadEnv(mode: 'development' | 'production', envDir: string, pref
       for (const [key, value] of Object.entries(parsed)) {
         if (key.startsWith(prefix) && env[key] === undefined) {
           env[key] = value;
-        } else if (key === 'NODE_ENV') {
+        }
+        else if (key === 'NODE_ENV') {
           // NODE_ENV override in .env file
-          //process.env.VITE_USER_NODE_ENV = value;
+          // process.env.VITE_USER_NODE_ENV = value;
         }
       }
     }
@@ -49,14 +49,14 @@ export function wrapperEnv<T extends Object>(envConf: Record<keyof T, string>): 
       //  布尔值
       if (/(true|false)/.test(value)) {
         return {
-          envName: envName,
+          envName,
           value: value === 'true'
         };
       }
       // 数值
       if (/^\d+$/.test(value)) {
         return {
-          envName: envName,
+          envName,
           value: Number(value)
         };
       }
@@ -65,16 +65,17 @@ export function wrapperEnv<T extends Object>(envConf: Record<keyof T, string>): 
         let realValue: unknown = value;
         try {
           realValue = JSON.parse(value);
-        } catch (error) {}
+        }
+        catch (error) { }
         return {
-          envName: envName,
+          envName,
           value: realValue
         };
       }
       //  字符串
       return {
-        envName: envName,
-        value: value
+        envName,
+        value
       };
     })
     .reduce((prev, current) => {
@@ -101,17 +102,17 @@ function parse(src: string | Buffer): Record<string, string> {
         let val = keyValueArr[2] || '';
         const end = val.length - 1;
         const isDoubleQuoted = val[0] === '"' && val[end] === '"';
-        const isSingleQuoted = val[0] === "'" && val[end] === "'";
+        const isSingleQuoted = val[0] === '\'' && val[end] === '\'';
 
         // 如果具有引号，将其去掉
         if (isSingleQuoted || isDoubleQuoted) {
           val = val.substring(1, end);
 
           // if double quoted, expand newlines
-          if (isDoubleQuoted) {
+          if (isDoubleQuoted)
             val = val.replace(RE_NEWLINES, NEWLINE);
-          }
-        } else {
+        }
+        else {
           // remove surrounding whitespace
           val = val.trim();
         }
@@ -127,24 +128,22 @@ function lookupFile(dir: string, formats: Array<string> | string, pathOnly = fal
   formats = Array.isArray(formats) ? formats : [formats];
   for (const format of formats) {
     const fullPath = path.join(dir, format);
-    if (fs.existsSync(fullPath) && fs.statSync(fullPath).isFile()) {
+    if (fs.existsSync(fullPath) && fs.statSync(fullPath).isFile())
       return pathOnly ? fullPath : fs.readFileSync(fullPath, 'utf-8');
-    }
   }
   const parentDir = path.dirname(dir);
-  if (parentDir !== dir) {
+  if (parentDir !== dir)
     return lookupFile(parentDir, formats, pathOnly);
-  }
 }
 
-const main = function (config: { parsed: Record<string, string>; ignoreProcessEnv: boolean }) {
+function main(config: { parsed: Record<string, string>; ignoreProcessEnv: boolean }) {
   // if ignoring process.env, use a blank object
   const environment = config.ignoreProcessEnv ? {} : process.env;
 
   const interpolate = (envValue: string): string => {
     const matches = envValue.match(/(.?\${?(?:[a-zA-Z0-9_]+)?}?)/g) || [];
 
-    return matches.reduce(function (newEnv: string, match: string) {
+    return matches.reduce((newEnv: string, match: string) => {
       const parts = /(.?)\${?([a-zA-Z0-9_]+)?}?/g.exec(match);
       const prefix = parts[1];
 
@@ -153,11 +152,12 @@ const main = function (config: { parsed: Record<string, string>; ignoreProcessEn
       if (prefix === '\\') {
         replacePart = parts[0];
         value = replacePart.replace('\\$', '$');
-      } else {
+      }
+      else {
         const key = parts[2];
         replacePart = parts[0].substring(prefix.length);
         // process.env value 'wins' over .env file's value
-        value = environment.hasOwnProperty(key) ? environment[key] : config.parsed[key] || '';
+        value = Reflect.get(environment, key) ? environment[key] : config.parsed[key] || '';
 
         // Resolve recursive interpolations
         value = interpolate(value);
@@ -168,14 +168,13 @@ const main = function (config: { parsed: Record<string, string>; ignoreProcessEn
   };
 
   for (const configKey in config.parsed) {
-    const value = environment.hasOwnProperty(configKey) ? environment[configKey] : config.parsed[configKey];
+    const value = Reflect.get(environment, configKey) ? environment[configKey] : config.parsed[configKey];
 
     config.parsed[configKey] = interpolate(value);
   }
 
-  for (const processKey in config.parsed) {
+  for (const processKey in config.parsed)
     environment[processKey] = config.parsed[processKey];
-  }
 
   return config;
-};
+}

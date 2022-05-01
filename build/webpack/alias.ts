@@ -12,11 +12,13 @@ export function alias() {
   Object.keys(compilerOptions.paths).forEach((key) => {
     const path = compilerOptions.paths[key];
 
-    if (!Array.isArray(path)) return;
+    if (!Array.isArray(path))
+      return;
     const aliasName = key.match(ALIAS_REGEX)?.[0];
 
     const aliasPath = path?.[0].match(ALIAS_REGEX)?.[0];
-    if (!aliasName || !aliasPath) return;
+    if (!aliasName || !aliasPath)
+      return;
 
     paths[aliasName] = resolve(compilerOptions.baseUrl, aliasPath);
   });

@@ -25,17 +25,14 @@ export function isObject(val: unknown): val is Record<string | number | symbol, 
 }
 
 export function isEmpty<T = unknown>(val: T): val is T {
-  if (isArray(val) || isString(val)) {
+  if (isArray(val) || isString(val))
     return val.length === 0;
-  }
 
-  if (val instanceof Map || val instanceof Set) {
+  if (val instanceof Map || val instanceof Set)
     return val.size === 0;
-  }
 
-  if (isObject(val)) {
+  if (isObject(val))
     return Object.keys(val).length === 0;
-  }
 
   return false;
 }
@@ -48,7 +45,7 @@ export function isNumber(val: unknown): val is number {
   return is(val, 'Number');
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function isNumeric(val: any): val is number | string {
   return !isArray(val) && !isObject(val) && val - parseFloat(val) + 1 >= 0;
 }

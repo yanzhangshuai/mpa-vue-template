@@ -1,4 +1,4 @@
-import { Router } from 'vue-router';
+import type { Router } from 'vue-router';
 import { useUserStore } from 'module-a/store/user';
 
 /**

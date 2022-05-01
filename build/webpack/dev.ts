@@ -1,19 +1,8 @@
-import { Configuration } from 'webpack-dev-server';
-import { Env } from '../type/env';
-import { Module } from '../type/webpack';
-import { createProxy } from './proxy';
+import type { Configuration } from 'webpack-dev-server';
+import type { Env } from '../type/env';
+import type { Module } from '../type/webpack';
 import { findPort } from '../util/helper';
-
-/**
- * rewrites
- * @param module
- * @returns
- */
-function rewrites(module: Module) {
-  return Object.keys(module).map((key) => {
-    return { from: new RegExp(`^\/${key}`), to: `/${key}/index.html` };
-  });
-}
+import { createProxy } from './proxy';
 
 export function createDevServer(module: Module, env: Env): Promise<Configuration> {
   let open: boolean | Array<string> = false;
@@ -21,12 +10,12 @@ export function createDevServer(module: Module, env: Env): Promise<Configuration
   if (env.WEBPACK_SERVER_OPEN) {
     // open
     const protocol = env.WEBPACK_SERVER_HTTPS ? 'https' : 'http';
-    open = Object.keys(module).map((key) => `${protocol}://${env.WEBPACK_SERVER_HOST}:${env.WEBPACK_SERVER_PORT}/${key}`);
+    open = Object.keys(module).map(key => `${protocol}://${env.WEBPACK_SERVER_HOST}:${env.WEBPACK_SERVER_PORT}/${key}`);
   }
 
   const conf: Configuration = {
     port: env.WEBPACK_SERVER_PORT,
-    open: open,
+    open,
     host: env.WEBPACK_SERVER_HOST,
     compress: env.WEBPACK_SERVER_COMPRESS,
     hot: true,
@@ -46,13 +35,6 @@ export function createDevServer(module: Module, env: Env): Promise<Configuration
       writeToDisk: env.WEBPACK_SERVER_WRITE_TO_DIST
     },
 
-    // watchFiles: {
-    //   paths: ['src/**/*.png', 'public/**/*'],
-    //   options: {
-    //     usePolling: false,
-    //     ignored: /node_modules/
-    //   }
-    // },
     proxy: createProxy(env.WEBPACK_SERVER_PROXY)
   };
 
@@ -63,5 +45,16 @@ export function createDevServer(module: Module, env: Env): Promise<Configuration
         resolve(conf);
       })
       .catch(() => resolve(conf));
+  });
+}
+
+/**
+ * rewrites
+ * @param module
+ * @returns
+ */
+function rewrites(module: Module) {
+  return Object.keys(module).map((key) => {
+    return { from: new RegExp(`^\/${key}`), to: `/${key}/index.html` };
   });
 }

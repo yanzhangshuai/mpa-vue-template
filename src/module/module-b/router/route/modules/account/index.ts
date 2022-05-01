@@ -1,11 +1,12 @@
 import { createVNode } from 'vue';
-import { RouteRecordRaw, RouterView } from 'vue-router';
+import type { RouteRecordRaw } from 'vue-router';
+import { RouterView } from 'vue-router';
 import { AccountRouteName } from './const';
 
 const router: RouteRecordRaw = {
   path: '/account',
   name: AccountRouteName.DEFAULT_ROUTER,
-  component: () => /* webpackChunkName: "module-b~account"*/ Promise.resolve(createVNode(RouterView)),
+  component: () => /* webpackChunkName: "module-b~account" */ Promise.resolve(createVNode(RouterView)),
   children: [
     {
       path: '',
@@ -14,12 +15,12 @@ const router: RouteRecordRaw = {
     {
       path: 'login',
       name: AccountRouteName.LOGIN_ROUTER,
-      component: () => import(/* webpackChunkName: "module-b~account"*/ `module-b/page/account/login/index.vue`)
+      component: () => import(/* webpackChunkName: "module-b~account" */ 'module-b/page/account/login/index.vue')
     },
     {
       path: 'register',
       name: AccountRouteName.REGISTER_ROUTER,
-      component: () => import(/* webpackChunkName: "module-b~account"*/ `module-b/page/account/register/index.vue`)
+      component: () => import(/* webpackChunkName: "module-b~account" */ 'module-b/page/account/register/index.vue')
     }
   ]
 };

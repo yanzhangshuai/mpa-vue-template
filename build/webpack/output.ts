@@ -1,23 +1,22 @@
-import { AssetInfo } from 'webpack';
-import { Mode } from '../type/webpack';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import type { AssetInfo } from 'webpack';
+import type { Mode } from '../type/webpack';
 
 /**
  * js filename
  * @param mode
  * @param pathData
- * @param assetInfo
+ * @param _assetInfo
  * @returns
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function filename(mode: Mode, pathData: unknown, assetInfo: AssetInfo): string {
-  const module = pathData['chunk']['runtime'];
-  const name = pathData['chunk']['name'] === module ? 'index' : pathData['chunk']['name'];
+export function filename(mode: Mode, pathData: any, _assetInfo: AssetInfo): string {
+  const module = pathData.chunk.runtime;
+  const name = pathData.chunk.name === module ? 'index' : pathData.chunk.name;
 
   const hash = mode === 'production' ? '[contenthash].' : '';
 
-  if (typeof module === 'string') {
+  if (typeof module === 'string')
     return `${module}/js/${name}.${hash}js`;
-  }
 
   return `common/js/${name}.${hash}js`;
 }
@@ -26,13 +25,12 @@ export function filename(mode: Mode, pathData: unknown, assetInfo: AssetInfo): s
  * js chunkFilename
  * @param mode
  * @param pathData
- * @param assetInfo
+ * @param _assetInfo
  * @returns
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function chunkFilename(mode: Mode, pathData: unknown, assetInfo?: AssetInfo): string {
-  const module = pathData['chunk']['runtime'];
-  const name = pathData['chunk']['name'] === module ? 'index' : pathData['chunk']['name'];
+export function chunkFilename(mode: Mode, pathData: any, _assetInfo: AssetInfo): string {
+  const module = pathData.chunk.runtime;
+  const name = pathData.chunk.name === module ? 'index' : pathData.chunk.name;
 
   const hash = mode === 'production' ? '[contenthash].' : '';
 
@@ -43,20 +41,18 @@ export function chunkFilename(mode: Mode, pathData: unknown, assetInfo?: AssetIn
  * css filename
  * @param mode
  * @param pathData
- * @param assetInfo
+ * @param _assetInfo
  * @returns
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function cssFilename(mode: Mode, pathData: unknown, assetInfo?: AssetInfo): string {
-  const module = pathData['chunk']['runtime'];
+export function cssFilename(mode: Mode, pathData: any, _assetInfo: AssetInfo): string {
+  const module = pathData.chunk.runtime;
 
-  const name = pathData['chunk']['name'] === module ? 'index' : pathData['chunk']['name'];
+  const name = pathData.chunk.name === module ? 'index' : pathData.chunk.name;
 
   const hash = mode === 'production' ? '[contenthash].' : '';
 
-  if (typeof module === 'string') {
+  if (typeof module === 'string')
     return `${module}/css/${name}.${hash}css`;
-  }
 
   return `common/css/${name}.${hash}css`;
 }
@@ -64,14 +60,13 @@ export function cssFilename(mode: Mode, pathData: unknown, assetInfo?: AssetInfo
 /**
  * css chunkFilename
  * @param mode
- * @param path
- * @param assetInfo
+ * @param pathData
+ * @param _assetInfo
  * @returns
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function cssChunkFilename(mode: Mode, path: unknown, assetInfo?: AssetInfo): string {
-  const module = path['chunk']['runtime'];
-  const name = path['chunk']['name'] === module ? 'index' : path['chunk']['name'];
+export function cssChunkFilename(mode: Mode, pathData: any, _assetInfo: AssetInfo): string {
+  const module = pathData.chunk.runtime;
+  const name = pathData.chunk.name === module ? 'index' : pathData.chunk.name;
 
   const hash = mode === 'production' ? '[contenthash]' : '';
 

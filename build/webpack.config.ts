@@ -1,16 +1,16 @@
 import path from 'path';
-import { Configuration } from 'webpack';
+import type { Configuration } from 'webpack';
 import TerserPlugin from 'terser-webpack-plugin';
 import { merge as webpackMerge } from 'webpack-merge';
 import { version } from '../package.json';
-import { Env } from './type/env';
+import type { Env } from './type/env';
 import { loadEnv, wrapperEnv } from './util/env';
 import { configPath, resolve } from './util/path';
 import { getEntry, getModule } from './util/module';
 import { alias } from './webpack/alias';
 import { support } from './webpack/support';
 import { createDevServer } from './webpack/dev';
-import { filename, chunkFilename } from './webpack/output';
+import { chunkFilename, filename } from './webpack/output';
 
 export default async (option: { WEBPACK_BUNDLE?: boolean; WEBPACK_BUILD?: boolean; WEBPACK_SERVE?: boolean; target?: string; t?: string }): Promise<Configuration> => {
   const mode = option.WEBPACK_BUILD ? 'production' : 'development';
@@ -37,7 +37,7 @@ export default async (option: { WEBPACK_BUNDLE?: boolean; WEBPACK_BUILD?: boolea
   const baseConf: Configuration = {
     target: 'web',
 
-    mode: mode,
+    mode,
 
     cache: typeof webpackEnv.WEBPACK_CATCH === 'boolean' ? webpackEnv.WEBPACK_CATCH : { type: webpackEnv.WEBPACK_CATCH },
 
@@ -52,7 +52,7 @@ export default async (option: { WEBPACK_BUNDLE?: boolean; WEBPACK_BUILD?: boolea
       clean: true
     },
 
-    devServer: devServer,
+    devServer,
 
     optimization: {
       minimize: mode === 'production',
