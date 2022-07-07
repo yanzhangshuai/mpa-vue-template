@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { onMounted, ref, unref, watch } from 'vue';
-import type { RefSetupDemoExpose } from '@/component/modules/ref-setup-demo/index.vue';
+import type { RefSetupDemoExpose } from '@/component/modules/ref-setup-demo/type';
 
 const name = $ref('123');
 const refSetupDemoRef = ref<RefSetupDemoExpose>();
