@@ -1,19 +1,22 @@
-import { flatMap, isArray } from 'lodash-es';
 import type { RouteRecordRaw } from 'vue-router';
+
+import { flatMap, isArray } from 'lodash-es';
+
+import { moduleFilter } from '@/util/helper';
+
 import { HomeRouteName } from './modules/home/const';
 import { ErrorRouteName } from './modules/error/const';
-import { moduleFilter } from '@/util/helper';
 
 const routes: Array<RouteRecordRaw> = [
   ...findModuleRoutes(),
   {
     path: '/',
-    redirect: HomeRouteName.DEFAULT_ROUTER
+    redirect: HomeRouteName.DEFAULT
   },
   {
     path: '/:catchAll(.*)',
     redirect: {
-      name: ErrorRouteName.NOT_FOUND_ROUTER
+      name: ErrorRouteName.NOT_FOUND
     }
   }
 ];
@@ -25,16 +28,7 @@ export default routes;
  * @returns
  */
 function findModuleRoutes(): Array<RouteRecordRaw> {
-  const modules = moduleFilter<Array<RouteRecordRaw> | RouteRecordRaw>(
-    require.context('./modules/', true, /\.(ts|js)$/),
-    // 只需要第一层目录下面的index文件作为router
-    /^\.\/(\w+)\/index\.(ts|js)$/
-  );
+  const modules = moduleFilter(import.meta.glob('./modules/*/index.ts', { eager: true })) as Record<string, Array<RouteRecordRaw> | RouteRecordRaw>;
 
-  return flatMap(
-    Object.keys(modules).map((key) => {
-      const module: Array<RouteRecordRaw> | RouteRecordRaw = modules[key] as Array<RouteRecordRaw> | RouteRecordRaw;
-      return isArray(module) ? module : [module];
-    })
-  );
+  return flatMap(Object.values(modules).map(module => isArray(module) ? module : [module]));
 }

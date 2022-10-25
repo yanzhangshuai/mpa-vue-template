@@ -1,8 +1,10 @@
 import fs from 'fs';
 import path from 'path';
-import type { Module } from '../type/webpack';
+
 import { resolve } from './path';
 import { intersection } from './helper';
+
+import type { Module } from '../type/vite';
 
 /**
  * 获取module
@@ -17,7 +19,7 @@ export function getModule(modulePath: string, targetModule?: Array<string>): Mod
   // 利用交集获取当前指定modules
   const intersectModules = intersection(_path, targetModule || [], (m1, m2) => m1.toLocaleLowerCase() === m2.toLocaleLowerCase());
 
-  const module = {};
+  const module: Module = {};
 
   (intersectModules.length ? intersectModules : _path).forEach((item) => {
     module[`${item}`] = path.join(modulePath, item);
@@ -33,14 +35,14 @@ export function getModule(modulePath: string, targetModule?: Array<string>): Mod
  * @param file
  * @returns
  */
-export function getEntry(module: Module | string, targetModule?: Array<string>, file = 'main.ts') {
+export function getEntry(module: Module | string, targetModule?: Array<string>, file = 'main.ts'): Module {
   let _module: Record<string, string>;
   if (typeof module === 'string')
     _module = getModule(module, targetModule);
   else
     _module = module;
 
-  const entry = {};
+  const entry: Module = {};
   Object.keys(_module).forEach((key) => {
     entry[key] = path.join(_module[key], file);
   });

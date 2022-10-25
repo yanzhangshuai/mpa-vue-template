@@ -1,4 +1,4 @@
-<script lang="ts" setup>
+<script setup lang="ts">
 import 'dayjs/locale/zh-cn';
 </script>
 
@@ -7,5 +7,3 @@ import 'dayjs/locale/zh-cn';
     <slot />
   </div>
 </template>
-
-<style lang="less" scoped></style>

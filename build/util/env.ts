@@ -1,12 +1,14 @@
 import fs from 'fs';
 import path from 'path';
 
+import type { Mode } from '../type/vite';
+
 const NEWLINE = '\n';
 const RE_NEWLINES = /\\n/g;
 const NEWLINES_MATCH = /\n|\r|\r\n/;
 const RE_INI_KEY_VAL = /^\s*([\w.-]+)\s*=\s*(.*)?\s*$/;
 
-export function loadEnv(mode: 'development' | 'production', envDir: string, prefix = 'WEBPACK_'): Record<string, string> {
+export function loadEnv(mode: Mode, envDir: string, prefix = 'VITE_'): Record<string, string> {
   const env: Record<string, string> = {};
   const envFiles = [`.env.${mode}.local`, /** mode file */ `.env.${mode}`, /** local file */ '.env.local', /** default file */ '.env'];
   // 检查是否有前缀起始的env变量

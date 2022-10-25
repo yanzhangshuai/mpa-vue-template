@@ -1,14 +1,3 @@
-import portfinder from 'portfinder';
-
-/**
- * 获取可用端口
- * @returns
- * @param startPort
- */
-export function findPort(startPort: number): Promise<number> {
-  return portfinder.getPortPromise({ startPort, port: startPort });
-}
-
 /**
  * 交集
  * @param arr1
@@ -19,4 +8,13 @@ export function findPort(startPort: number): Promise<number> {
 export function intersection<T>(arr1: Array<T>, arr2: Array<T>, fn?: (val1: T, val2: T) => boolean) {
   const _fn = fn || ((val1, val2) => val1 === val2);
   return arr1.filter(val1 => arr2.find(val2 => _fn(val1, val2)));
+}
+
+/**
+ * 去除字符串特殊字符
+ * @param str
+ */
+export function trimSpec(str: string): string {
+  // 去除字符串中特殊字符串
+  return str.replace(/[^a-zA-Z0-9]/g, '');
 }

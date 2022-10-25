@@ -2,99 +2,92 @@ export interface Env {
   /**
    * 项目标题
    */
-  readonly WEBPACK_APP_TITLE: string
-
-  /**
-   * 是否支持JSX
-   */
-  readonly WEBPACK_SUPPORT_JSX: boolean
+  readonly VITE_APP_TITLE: string
 
   /**
    * 是否支持options api写法
    */
-  readonly WEBPACK_SUPPORT_VUE_OPTIONS_API: boolean
+  readonly VITE_SUPPORT_VUE_OPTIONS_API: boolean
 
   /**
    * 打包资源公共路径
    */
-  readonly WEBPACK_PUBLIC_PATH: string
+  readonly VITE_PUBLIC_PATH: string
 
   /**
-   * webpack 缓存
+   * 启用打包资源报告
    */
-  readonly WEBPACK_CATCH: boolean | 'filesystem' | 'memory'
+  readonly VITE_REPORT: boolean
 
-  /**
-   * source map
-   */
-  readonly WEBPACK_DEVTOOL: string | false
-
-  /**
-   * output地址
-   */
-  readonly WEBPACK_OUTPUT_DIR: string
-
-  /**
-   * 打包资源报告
-   */
-  readonly WEBPACK_REPORT: boolean
+  readonly VITE_USE_MOCK: boolean
 
   //  dev
-
   /**
    * devServer 主机
    */
-  WEBPACK_SERVER_HOST: string
+  VITE_SERVER_HOST: string
 
   /**
-   *  devServer 端口号
+   * devServer 端口号
    */
-  WEBPACK_SERVER_PORT: number
+  VITE_SERVER_PORT: number
 
   /**
-   * 压缩
+   * 默认打开页面
    */
-  readonly WEBPACK_SERVER_COMPRESS: boolean
+  readonly VITE_SERVER_OPEN: boolean
 
-  /**
-   *  输出到本地
-   */
-  readonly WEBPACK_SERVER_WRITE_TO_DIST: boolean
-
-  /**
-   *  默认打开页面
-   */
-  readonly WEBPACK_SERVER_OPEN: boolean
   /**
    *HTTPS协议
    */
-  readonly WEBPACK_SERVER_HTTPS: boolean
+  readonly VITE_SERVER_HTTPS: boolean
 
   /**
    * 服务代理
    */
-  readonly WEBPACK_SERVER_PROXY: Record<string, string>
-
-  /**
-   * 日志等级
-   */
-  readonly WEBPACK_SERVER_STATS: 'none' | 'summary' | 'errors-only' | 'errors-warnings' | 'minimal' | 'normal' | 'detailed' | 'verbose' | boolean
+  readonly VITE_SERVER_PROXY: Record<string, string>
 
   //  build
+
+  // /**
+  //  * 最低支持目标
+  //  */
+  // readonly VITE_BUILD_TARGET: 'modules' | EsbuildTransformOptions['target'] | false
+
   /**
    * 文件压缩格式
    */
-  readonly WEBPACK_BUILD_COMPRESS: 'gzip' | 'brotli' | 'none'
+  readonly VITE_BUILD_COMPRESS: 'gzip' | 'brotli' | 'none'
 
   /**
-   * 启用文件压缩格式时是否删除源文
+   * 启用文件压缩格式时是否删除源文件
    */
-  readonly WEBPACK_BUILD_COMPRESS_DELETE_ORIGIN_FILE: boolean
+  readonly VITE_BUILD_COMPRESS_DELETE_ORIGIN_FILE: boolean
+
+  /**
+   * source map
+   */
+  readonly VITE_BUILD_SOURCE_MAP: boolean | 'inline' | 'hidden'
+
+  /**
+   * 压缩工具
+   */
+  readonly VITE_BUILD_MINIFY: boolean | 'terser' | 'esbuild'
+
+  /**
+   * 静态文件地址
+   */
+  readonly VITE_BUILD_ASSETS_DIR: string
 
   /**
    * 删除console
    */
-  readonly WEBPACK_BUILD_DROP_CONSOLE: boolean
+  readonly VITE_BUILD_DROP_CONSOLE: boolean
 
-  readonly WEBPACK_USE_IMAGEMIN: boolean
+  readonly VITE_USE_IMAGEMIN: boolean
+
+  /**
+   *  output目录
+   */
+  readonly VITE_BUILD_OUTPUT_DIR: string
 }

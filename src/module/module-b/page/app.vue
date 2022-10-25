@@ -1,11 +1,10 @@
 <script lang="ts" setup>
-import { useTitle } from '@/hook/web/title';
 
-useTitle();
+import { usePageTitle } from '@/hook/web/title';
+
+usePageTitle();
 </script>
 
 <template>
-  <config-provider>
-    <router-view />
-  </config-provider>
+  <router-view />
 </template>
